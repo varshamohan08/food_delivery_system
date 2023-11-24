@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        h2 {
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+    <script>
+        function redirectList() {
+            window.location.href = '/list'; 
+        }
+        function updateData(id) {
+            var formData = new FormData(document.querySelector('form'));
+            formData.append('id', id)
+            var xhr = new XMLHttpRequest();
+            xhr.open('PUT', '{% url 'reg' %}', true);
+            xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    window.location.href = '/list';
+                } else {
+                    console.error('Request failed:', xhr.statusText);
+                }
+            };
+
+            // Send the request
+            xhr.send(formData);
+        }
+    </script>
+</head>
+<body>
+
+<form action="#" enctype="multipart/form-data">
+    <h2>Update User</h2>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="button" onclick="updateData('{{id}}')">Update</button>
+</form>
+    
+<!-- <form action="/reg" method="post">
+    <input type="hidden" name="_method" value="put">
+    <h2>Update User</h2>
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Update">
+</form> -->
+
+</body>
+</html>
